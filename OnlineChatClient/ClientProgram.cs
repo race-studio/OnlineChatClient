@@ -11,7 +11,7 @@ namespace OnlineChatClient
     {
         static void Main(string[] args)
         {
-            int    port = 8005;
+            int port = 8005;
             string ip = "127.0.0.1";
             string message = "a";
 
@@ -20,8 +20,8 @@ namespace OnlineChatClient
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Console.WriteLine("Socket Ready");
 
-            socket.Connect( ipPoint );
-            
+            socket.Connect(ipPoint);
+
             byte[] data = Encoding.Unicode.GetBytes(message);
             socket.Send(data);
 
