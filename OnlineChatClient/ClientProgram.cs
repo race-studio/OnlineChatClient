@@ -13,17 +13,35 @@ namespace OnlineChatClient
         {
             int port = 8005;
             string ip = "127.0.0.1";
-            string message = "a";
+           // string message = "a";
+            Console.Write("Введите свое имя:");
+            string userName = Console.ReadLine();
+            TcpClient client = null;
 
-            IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+            client = new TcpClient(ip, port);
+            NetworkStream stream = client.GetStream();
+
+
+
+            /*IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ip), port);
 
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Console.WriteLine("Socket Ready");
 
             socket.Connect(ipPoint);
+            */
 
+            Console.Write(userName + ": ");
+            // ввод сообщения
+            string message = Console.ReadLine();
+            message = String.Format("{0}: {1}", userName, message);
+            // преобразуем сообщение в массив байтов
             byte[] data = Encoding.Unicode.GetBytes(message);
-            socket.Send(data);
+            // отправка сообщения
+            stream.Write(data, 0, data.Length);
+
+           // byte[] data = Encoding.Unicode.GetBytes(message);
+           // socket.Send(data);
 
             data = new byte[256]; // буфер для ответа
             StringBuilder builder = new StringBuilder();
@@ -31,17 +49,19 @@ namespace OnlineChatClient
 
             do
             {
-                bytes = socket.Receive(data, data.Length, 0);
+                bytes = stream.Read(data, 0, data.Length);
                 builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
             }
-            while (socket.Available > 0);
-            Console.WriteLine("ответ сервера: " + builder.ToString());
+            while (stream.DataAvailable);
+
+            message = builder.ToString();
+            Console.WriteLine("Сервер: {0}", message);
 
             // закрываем сокет
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
-
-            Console.WriteLine("end!");
+            // socket.Shutdown(SocketShutdown.Both);
+            //socket.Close();
+            client.Close();
+            //Console.WriteLine("end!");
             string m = Console.ReadLine();
         }
     }
