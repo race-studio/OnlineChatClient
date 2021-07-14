@@ -9,11 +9,12 @@ namespace OnlineChatClient
 {
     class ClientProgram
     {
+        const int port = 8005;
+        const string ip = "127.0.0.1";
         static void Main(string[] args)
         {
-            int port = 8005;
-            string ip = "127.0.0.1";
-           // string message = "a";
+            
+           
             Console.Write("Введите свое имя:");
             string userName = Console.ReadLine();
             TcpClient client = null;
@@ -43,7 +44,7 @@ namespace OnlineChatClient
            // byte[] data = Encoding.Unicode.GetBytes(message);
            // socket.Send(data);
 
-            data = new byte[256]; // буфер для ответа
+            data = new byte[64]; // буфер для ответа
             StringBuilder builder = new StringBuilder();
             int bytes = 0; // количество полученных байт
 
@@ -62,7 +63,7 @@ namespace OnlineChatClient
             //socket.Close();
             client.Close();
             //Console.WriteLine("end!");
-            string m = Console.ReadLine();
+            //string m = Console.ReadLine();
         }
     }
 }
