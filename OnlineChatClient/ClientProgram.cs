@@ -27,13 +27,7 @@ namespace OnlineChatClient
 
             Console.Write(userName + ": ");
 
-            /*IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ip), port);
 
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Console.WriteLine("Socket Ready");
-
-            socket.Connect(ipPoint);
-            */
             listenThreadObj = new ClientTreading( stream );
 
             Thread listenThread = new Thread(new ThreadStart(listenThreadObj.ListenForMessages) );
@@ -43,22 +37,18 @@ namespace OnlineChatClient
             {
                 // ввод сообщения
                 string message = Console.ReadLine();
+
+                if (message.Equals( "exit" ) )
+                {
+                    client.Close();
+                }
+
                 message = String.Format("{0}: {1}", userName, message);
                 // преобразуем сообщение в массив байтов
                 byte[] data = Encoding.Unicode.GetBytes(message);
                 // отправка сообщения
                 stream.Write(data, 0, data.Length);
-
-                // byte[] data = Encoding.Unicode.GetBytes(message);
-                // socket.Send(data);
-            }
-
-            // закрываем сокет
-            // socket.Shutdown(SocketShutdown.Both);
-            //socket.Close();
-            client.Close();
-            //Console.WriteLine("end!");
-            //string m = Console.ReadLine();
+            }           
         }
     }
 
