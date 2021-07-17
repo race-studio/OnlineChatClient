@@ -40,7 +40,8 @@ namespace OnlineChatClient
 
                 if (message.Equals( "exit" ) )
                 {
-                    client.Close();
+                    System.Environment.Exit(0);
+                    break;
                 }
 
                 message = String.Format("{0}: {1}", userName, message);
@@ -54,7 +55,7 @@ namespace OnlineChatClient
 
     class ClientTreading
     {
-        NetworkStream stream;
+        public NetworkStream stream;
         public ClientTreading(NetworkStream clientStream)
         {
             this.stream = clientStream;
@@ -63,14 +64,23 @@ namespace OnlineChatClient
         {
             while ( true )
             {
+                Thread.Sleep(60);
+
+                if (stream.CanRead == false )
+                {
+                    break;
+                }
+
                 byte[] data = new byte[64]; // буфер для ответа
                 StringBuilder builder = new StringBuilder();
                 int bytes = 0; // количество полученных байт
-
                 do
                 {
-                    bytes = stream.Read(data, 0, data.Length);
-                    builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
+                    if (stream.CanRead == true && stream != null)
+                    {
+                        bytes = stream.Read(data, 0, data.Length);
+                        builder.Append(Encoding.Unicode.GetString(data, 0, bytes));
+                    }
                 }
                 while (stream.DataAvailable);
 
