@@ -38,18 +38,19 @@ namespace OnlineChatClient
                 // ввод сообщения
                 string message = Console.ReadLine();
 
-                if (message.Equals( "exit" ) )
-                {
-                    System.Environment.Exit(0);
-                    break;
-                }
 
                 message = String.Format("{0}: {1}", userName, message);
                 // преобразуем сообщение в массив байтов
                 byte[] data = Encoding.Unicode.GetBytes(message);
                 // отправка сообщения
                 stream.Write(data, 0, data.Length);
-            }           
+
+               if (message.Equals(String.Format("{0}: {1}", userName, "exit")) )
+               {
+                   System.Environment.Exit(0);
+                   break;
+               }
+            }
         }
     }
 
@@ -85,7 +86,7 @@ namespace OnlineChatClient
                 while (stream.DataAvailable);
 
                 string message = builder.ToString();
-                Console.WriteLine("Сервер: {0}", message);
+                Console.WriteLine(message);
             }
         }
     }
