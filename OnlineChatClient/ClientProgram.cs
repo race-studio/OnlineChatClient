@@ -12,7 +12,7 @@ namespace OnlineChatClient
     {
         const int port = 8005;
         const string ip = "127.0.0.1";
-        private static ClientTreading listenThreadObj;
+        private static Client clientObj;
 
         static void Main(string[] args)
         {
@@ -20,6 +20,10 @@ namespace OnlineChatClient
            
             Console.Write("Введите свое имя:");
             string userName = Console.ReadLine();
+
+            Console.Write("Введите свое имя:");
+           // string userName = Console.ReadLine();
+
             TcpClient client = null;
 
             client = new TcpClient(ip, port);
@@ -28,9 +32,9 @@ namespace OnlineChatClient
             Console.Write(userName + ": ");
 
 
-            listenThreadObj = new ClientTreading( stream );
+            clientObj = new Client( stream );
 
-            Thread listenThread = new Thread(new ThreadStart(listenThreadObj.ListenForMessages) );
+            Thread listenThread = new Thread(new ThreadStart(clientObj.ListenForMessages) );
             listenThread.Start();
 
             while (true)
@@ -54,10 +58,10 @@ namespace OnlineChatClient
         }
     }
 
-    class ClientTreading
+    class Client
     {
         public NetworkStream stream;
-        public ClientTreading(NetworkStream clientStream)
+        public Client(NetworkStream clientStream)
         {
             this.stream = clientStream;
         }
